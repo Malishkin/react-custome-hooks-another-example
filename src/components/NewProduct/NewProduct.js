@@ -1,13 +1,11 @@
-import { useState, useRef } from "react";
-
+import { useState, useEffect } from "react";
 import Section from "../UI/Section";
 import ProductForm from "./ProductForm";
 
 const NewProduct = (props) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
-
-  const productInputRef = useRef(); // Add a useRef for the input field
+  const [resetFormKey, setResetFormKey] = useState(0);
 
   const enterProductHandler = async (productText) => {
     setIsLoading(true);
@@ -34,8 +32,7 @@ const NewProduct = (props) => {
       const createdProduct = { id: generatedId, text: productText };
 
       props.onAddProduct(createdProduct);
-
-      productInputRef.current.value = ""; // Reset the input field value to an empty string
+      setResetFormKey((prevKey) => prevKey + 1);
     } catch (e) {
       setError(e.message || "Что-то пошло не так...");
     }
@@ -45,9 +42,9 @@ const NewProduct = (props) => {
   return (
     <Section>
       <ProductForm
+        key={resetFormKey}
         onEnterProduct={enterProductHandler}
         loading={isLoading}
-        inputRef={productInputRef} // Pass the inputRef to the ProductForm component
       />
       {error && <p>{error}</p>}
     </Section>
