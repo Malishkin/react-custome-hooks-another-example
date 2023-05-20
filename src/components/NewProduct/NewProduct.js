@@ -36,6 +36,7 @@ const NewProduct = (props) => {
       setError(e.message || "Что-то пошло не так...");
     }
     setIsLoading(false);
+    
   };
 
   return (
